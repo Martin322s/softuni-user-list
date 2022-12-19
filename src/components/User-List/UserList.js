@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 import UserRow from "./UserRow";
 
 const UserList = () => {
+    const { users } = useContext(UserContext);
+
     return (
         <section className="card users-container">
             <div className="table-wrapper">
@@ -102,7 +106,7 @@ const UserList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <UserRow />
+                        {users.map(user => <UserRow key={user._id} user={user} />)}
                     </tbody>
                 </table>
             </div>
