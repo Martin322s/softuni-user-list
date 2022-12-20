@@ -3,22 +3,32 @@ import * as service from "../../services/ContextService";
 import { UserContext } from "../../contexts/UserContext";
 import UserRow from "./UserRow";
 import Details from "../Details/Details";
+import Delete from "../Delete/Delete";
 
 const UserList = () => {
     const { users } = useContext(UserContext);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [deleteUser, setDeleteUser] = useState(false);
 
     const detailsHandler = (userId) => {
         service.getOne(userId)
             .then(result => setSelectedUser(result.user));
     }
 
-    const closeHandler = () => setSelectedUser(null);
+    const deleteHandler = (userId) => {
+        setDeleteUser(true);
+    }
+
+    const closeHandler = () => {
+        setSelectedUser(null);
+        setDeleteUser(false);
+    };
 
     return (
         <section className="card users-container">
             <div className="table-wrapper">
                 {selectedUser && <Details user={selectedUser} closeHandler={closeHandler} />}
+                {deleteUser && <Delete closeHandler={closeHandler} />}
                 <table className="table">
                     <thead>
                         <tr>
@@ -122,6 +132,7 @@ const UserList = () => {
                                 key={user._id}
                                 user={user}
                                 detailsHandler={detailsHandler}
+                                deleteHandler={deleteHandler}
                             />)
                         }
                     </tbody>
