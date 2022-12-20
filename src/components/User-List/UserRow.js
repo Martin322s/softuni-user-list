@@ -1,4 +1,4 @@
-const UserRow = ({ user }) => {
+const UserRow = ({ user, detailsHandler }) => {
     return (
         <tr>
             <td>
@@ -48,7 +48,11 @@ const UserRow = ({ user }) => {
                         ></path>
                     </svg>
                 </button>
-                <button className="btn info-btn" title="Info">
+                <button 
+                    className="btn info-btn" 
+                    title="Info" 
+                    onClick={() => detailsHandler(user._id)}
+                >
                     <svg
                         aria-hidden="true"
                         focusable="false"

@@ -1,13 +1,24 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import * as service from "../../services/ContextService";
 import { UserContext } from "../../contexts/UserContext";
 import UserRow from "./UserRow";
+import Details from "../Details/Details";
 
 const UserList = () => {
     const { users } = useContext(UserContext);
+    const [selectedUser, setSelectedUser] = useState(null);
+
+    const detailsHandler = (userId) => {
+        service.getOne(userId)
+            .then(result => setSelectedUser(result.user));
+    }
+
+    const closeHandler = () => setSelectedUser(null);
 
     return (
         <section className="card users-container">
             <div className="table-wrapper">
+                {selectedUser && <Details user={selectedUser} closeHandler={closeHandler} />}
                 <table className="table">
                     <thead>
                         <tr>
@@ -106,7 +117,13 @@ const UserList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(user => <UserRow key={user._id} user={user} />)}
+                        {users.map(user =>
+                            <UserRow
+                                key={user._id}
+                                user={user}
+                                detailsHandler={detailsHandler}
+                            />)
+                        }
                     </tbody>
                 </table>
             </div>
