@@ -4,31 +4,52 @@ import { UserContext } from "../../contexts/UserContext";
 import UserRow from "./UserRow";
 import Details from "../Details/Details";
 import Delete from "../Delete/Delete";
+import Create from "../Create/Create";
 
 const UserList = () => {
     const { users } = useContext(UserContext);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [deleteUser, setDeleteUser] = useState(false);
+    const [state, setState] = useState({
+        selectedUser: null,
+        deleteUser: false,
+        createUser: false
+    });
 
     const detailsHandler = (userId) => {
         service.getOne(userId)
-            .then(result => setSelectedUser(result.user));
+            .then(result => setState(state => ({
+                ...state,
+                selectedUser: result.user
+            })));
     }
 
     const deleteHandler = (userId) => {
-        setDeleteUser(true);
+        setState(state => ({
+            ...state,
+            deleteUser: true
+        }));
     }
 
     const closeHandler = () => {
-        setSelectedUser(null);
-        setDeleteUser(false);
+        setState({
+            selectedUser: null,
+            deleteUser: false,
+            createUser: false
+        });
     };
+
+    const createUserHandler = () => {
+        setState(state => ({
+            ...state,
+            createUser: true
+        }));
+    }
 
     return (
         <section className="card users-container">
             <div className="table-wrapper">
-                {selectedUser && <Details user={selectedUser} closeHandler={closeHandler} />}
-                {deleteUser && <Delete closeHandler={closeHandler} />}
+                {state.selectedUser && <Details user={state.selectedUser} closeHandler={closeHandler} />}
+                {state.deleteUser && <Delete closeHandler={closeHandler} />}
+                {state.createUser && <Create closeHandler={closeHandler}/>}
                 <table className="table">
                     <thead>
                         <tr>
@@ -138,7 +159,12 @@ const UserList = () => {
                     </tbody>
                 </table>
             </div>
-            <button className="btn-add btn">Add new user</button>
+            <button 
+                className="btn-add btn" 
+                onClick={() => createUserHandler()}
+            >
+                Add new user
+            </button>
         </section>
     );
 }
