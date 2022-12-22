@@ -1,4 +1,30 @@
+import { useState } from "react";
+
 const Create = ({ closeHandler }) => {
+    const [data, setData] = useState({
+        firstName: ''
+    });
+
+    const [error, setError] = useState({
+        message: null
+    });
+
+    const changeHandler = (ev) => {
+        setData(state => ({
+            ...state,
+            [ev.target.name]: ev.target.value
+        }));
+    }
+
+    const minLength = (length) => {
+        if (data.firstName.length < length) {
+            setError(state => ({
+                ...state,
+                message: 'First name should be at least 3 characters long!'
+            }));
+        }
+    }
+
     return (
         <div className="overlay">
             <div className="backdrop" onClick={() => closeHandler()} />
@@ -32,11 +58,21 @@ const Create = ({ closeHandler }) => {
                                     <span>
                                         <i className="fa-solid fa-user" />
                                     </span>
-                                    <input id="firstName" name="firstName" type="text" />
+                                    <input
+                                        id="firstName"
+                                        name="firstName"
+                                        type="text"
+                                        onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(3)}
+                                    />
                                 </div>
-                                <p className="form-error">
-                                    First name should be at least 3 characters long!
-                                </p>
+                                {error.message
+                                    ?
+                                    <p className="form-error">
+                                        First name should be at least 3 characters long!
+                                    </p>
+                                    : null
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="lastName">Last name</label>
@@ -139,9 +175,9 @@ const Create = ({ closeHandler }) => {
                             <button id="action-save" className="btn" type="submit">
                                 Save
                             </button>
-                            <button 
-                                id="action-cancel" 
-                                className="btn" 
+                            <button
+                                id="action-cancel"
+                                className="btn"
                                 type="button"
                                 onClick={() => closeHandler()}
                             >
