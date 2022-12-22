@@ -1,7 +1,7 @@
 const Details = ({ user, closeHandler }) => {
     return (
         <div className="overlay">
-            <div className="backdrop" onClick={closeHandler}/>
+            <div className="backdrop" onClick={closeHandler} />
             <div className="modal">
                 <div className="detail-container">
                     <header className="headers">
@@ -27,8 +27,8 @@ const Details = ({ user, closeHandler }) => {
                     <div className="content">
                         <div className="image-container">
                             <img
-                                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                                alt=""
+                                src={user.imageUrl}
+                                alt="profile"
                                 className="image"
                             />
                         </div>
