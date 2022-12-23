@@ -5,6 +5,8 @@ import UserRow from "./UserRow";
 import Details from "../Details/Details";
 import action from "../../constants/constants";
 import Edit from "../Edit/Edit";
+import Delete from "../Delete/Delete";
+import Create from "../Create/Create";
 
 const UserList = () => {
     const { users } = useContext(UserContext);
@@ -13,19 +15,11 @@ const UserList = () => {
         action: null
     });
 
-    const detailsHandler = (userId) => {
+    const clickHandler = (userId, actionType) => {
         service.getOne(userId)
             .then(result => setUserAction({
                 user: result.user,
-                action: action.Details
-            }));
-    }
-
-    const editHandler = (userId) => {
-        service.getOne(userId)
-            .then(result => setUserAction({
-                user: result.user,
-                action: action.Edit
+                action: actionType
             }));
     }
 
@@ -49,6 +43,19 @@ const UserList = () => {
 
                 {userAction.action === action.Edit &&
                     <Edit
+                        user={userAction.user}
+                        closeHandler={closeHandler}
+                    />
+                }
+
+                {userAction.action === action.Delete &&
+                    <Delete
+                        closeHandler={closeHandler}
+                    />
+                }
+
+                {userAction.action === action.Add &&
+                    <Create
                         closeHandler={closeHandler}
                     />
                 }
@@ -155,8 +162,7 @@ const UserList = () => {
                             <tr key={user._id}>
                                 <UserRow
                                     user={user}
-                                    detailsHandler={detailsHandler}
-                                    editHandler={editHandler}
+                                    onActionClick={clickHandler}
                                 />
                             </tr>
                         )}
@@ -165,6 +171,7 @@ const UserList = () => {
             </div>
             <button
                 className="btn-add btn"
+                onClick={() => clickHandler(null, "Add")}
             >
                 Add new user
             </button>

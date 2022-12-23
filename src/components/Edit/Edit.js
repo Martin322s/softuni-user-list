@@ -1,4 +1,4 @@
-const Edit = ({ closeHandler}) => {
+const Edit = ({ closeHandler, user }) => {
     return (
         <div className="overlay">
             <div className="backdrop" onClick={() => closeHandler()} />

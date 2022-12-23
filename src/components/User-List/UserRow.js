@@ -1,4 +1,6 @@
-const UserRow = ({ user, detailsHandler, editHandler }) => {
+import actions from "../../constants/constants";
+
+const UserRow = ({ user, onActionClick }) => {
     return (
         <>
             <td>
@@ -17,7 +19,7 @@ const UserRow = ({ user, detailsHandler, editHandler }) => {
                 <button 
                     className="btn edit-btn" 
                     title="Edit" 
-                    onClick={() => editHandler(user._id)}
+                    onClick={() => onActionClick(user._id, actions.Edit)}
                 >
                     <svg
                         aria-hidden="true"
@@ -35,7 +37,11 @@ const UserRow = ({ user, detailsHandler, editHandler }) => {
                         ></path>
                     </svg>
                 </button>
-                <button className="btn delete-btn" title="Delete">
+                <button 
+                    className="btn delete-btn" 
+                    title="Delete" 
+                    onClick={() => onActionClick(user._id, actions.Delete)}
+                >
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -55,7 +61,7 @@ const UserRow = ({ user, detailsHandler, editHandler }) => {
                 <button
                     className="btn info-btn"
                     title="Info"
-                    onClick={() => detailsHandler(user._id)}
+                    onClick={() => onActionClick(user._id, actions.Details)}
                 >
                     <svg
                         aria-hidden="true"
