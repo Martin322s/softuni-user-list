@@ -51,10 +51,10 @@ const Details = ({ user, closeHandler }) => {
                                 <strong>{showAddress(user.address)}</strong>
                             </p>
                             <p>
-                                Created on: <strong>{user.createdAt}</strong>
+                                Created on: <strong>{user.createdAt.substring(0, 10)}</strong>
                             </p>
                             <p>
-                                Modified on: <strong>{user.updatedAt}</strong>
+                                Modified on: <strong>{user.updatedAt.substring(0, 10)}</strong>
                             </p>
                         </div>
                     </div>

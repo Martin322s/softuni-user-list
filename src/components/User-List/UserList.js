@@ -3,53 +3,41 @@ import * as service from "../../services/ContextService";
 import { UserContext } from "../../contexts/UserContext";
 import UserRow from "./UserRow";
 import Details from "../Details/Details";
-import Delete from "../Delete/Delete";
-import Create from "../Create/Create";
+import action from "../../constants/constants";
 
 const UserList = () => {
     const { users } = useContext(UserContext);
-    const [state, setState] = useState({
-        selectedUser: null,
-        deleteUser: false,
-        createUser: false
+    const [userAction, setUserAction] = useState({
+        user: null,
+        action: null
     });
 
     const detailsHandler = (userId) => {
         service.getOne(userId)
-            .then(result => setState(state => ({
-                ...state,
-                selectedUser: result.user
-            })));
-    }
-
-    const deleteHandler = (userId) => {
-        setState(state => ({
-            ...state,
-            deleteUser: true
-        }));
+            .then(result => setUserAction({
+                user: result.user,
+                action: action.Details
+            }));
     }
 
     const closeHandler = () => {
-        setState({
-            selectedUser: null,
-            deleteUser: false,
-            createUser: false
+        setUserAction({
+            user: null,
+            action: null
         });
     };
-
-    const createUserHandler = () => {
-        setState(state => ({
-            ...state,
-            createUser: true
-        }));
-    }
 
     return (
         <section className="card users-container">
             <div className="table-wrapper">
-                {state.selectedUser && <Details user={state.selectedUser} closeHandler={closeHandler} />}
-                {state.deleteUser && <Delete closeHandler={closeHandler} />}
-                {state.createUser && <Create closeHandler={closeHandler}/>}
+
+                {userAction.action === action.Details &&
+                    <Details
+                        user={userAction.user}
+                        closeHandler={closeHandler}
+                    />
+                }
+
                 <table className="table">
                     <thead>
                         <tr>
@@ -149,19 +137,18 @@ const UserList = () => {
                     </thead>
                     <tbody>
                         {users.map(user =>
-                            <UserRow
-                                key={user._id}
-                                user={user}
-                                detailsHandler={detailsHandler}
-                                deleteHandler={deleteHandler}
-                            />)
-                        }
+                            <tr key={user._id}>
+                                <UserRow
+                                    user={user}
+                                    detailsHandler={detailsHandler}
+                                />
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
-            <button 
-                className="btn-add btn" 
-                onClick={() => createUserHandler()}
+            <button
+                className="btn-add btn"
             >
                 Add new user
             </button>

@@ -1,6 +1,6 @@
-const UserRow = ({ user, detailsHandler, deleteHandler }) => {
+const UserRow = ({ user, detailsHandler }) => {
     return (
-        <tr>
+        <>
             <td>
                 <img
                     src={user.imageUrl || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"}
@@ -12,7 +12,7 @@ const UserRow = ({ user, detailsHandler, deleteHandler }) => {
             <td>{user.lastName}</td>
             <td>{user.email}</td>
             <td>{user.phoneNumber}</td>
-            <td>{user.createdAt}</td>
+            <td>{user.createdAt.substring(0, 10)}</td>
             <td className="actions">
                 <button className="btn edit-btn" title="Edit">
                     <svg
@@ -31,7 +31,7 @@ const UserRow = ({ user, detailsHandler, deleteHandler }) => {
                         ></path>
                     </svg>
                 </button>
-                <button className="btn delete-btn" title="Delete" onClick={() => deleteHandler(user._id)}>
+                <button className="btn delete-btn" title="Delete">
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -70,7 +70,7 @@ const UserRow = ({ user, detailsHandler, deleteHandler }) => {
                     </svg>
                 </button>
             </td>
-        </tr>
+        </>
     );
 }
 

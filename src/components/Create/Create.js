@@ -1,30 +1,4 @@
-import { useState } from "react";
-
 const Create = ({ closeHandler }) => {
-    const [data, setData] = useState({
-        firstName: ''
-    });
-
-    const [error, setError] = useState({
-        message: null
-    });
-
-    const changeHandler = (ev) => {
-        setData(state => ({
-            ...state,
-            [ev.target.name]: ev.target.value
-        }));
-    }
-
-    const minLength = (length) => {
-        if (data.firstName.length < length) {
-            setError(state => ({
-                ...state,
-                message: 'First name should be at least 3 characters long!'
-            }));
-        }
-    }
-
     return (
         <div className="overlay">
             <div className="backdrop" onClick={() => closeHandler()} />
@@ -62,17 +36,11 @@ const Create = ({ closeHandler }) => {
                                         id="firstName"
                                         name="firstName"
                                         type="text"
-                                        onChange={(ev) => changeHandler(ev)}
-                                        onBlur={() => minLength(3)}
                                     />
                                 </div>
-                                {error.message
-                                    ?
-                                    <p className="form-error">
-                                        First name should be at least 3 characters long!
-                                    </p>
-                                    : null
-                                }
+                                <p className="form-error">
+                                    First name should be at least 3 characters long!
+                                </p>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="lastName">Last name</label>

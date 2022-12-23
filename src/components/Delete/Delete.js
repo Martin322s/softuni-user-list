@@ -1,7 +1,7 @@
-const Delete = ({ closeHandler}) => {
+const Delete = ({ closeHandler }) => {
     return (
         <div className="overlay">
-            <div className="backdrop" onClick={() => closeHandler()}/>
+            <div className="backdrop" onClick={() => closeHandler()} />
             <div className="modal">
                 <div className="confirm-container">
                     <header className="headers">
@@ -29,7 +29,12 @@ const Delete = ({ closeHandler}) => {
                             <button id="action-save" className="btn" type="submit">
                                 Delete
                             </button>
-                            <button id="action-cancel" className="btn" type="button" onClick={() => closeHandler()}>
+                            <button
+                                id="action-cancel"
+                                className="btn"
+                                type="button"
+                                onClick={() => closeHandler()}
+                            >
                                 Cancel
                             </button>
                         </div>
