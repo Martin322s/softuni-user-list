@@ -16,11 +16,18 @@ const UserList = () => {
     });
 
     const clickHandler = (userId, actionType) => {
-        service.getOne(userId)
+        if (userId !== null) {
+            service.getOne(userId)
             .then(result => setUserAction({
                 user: result.user,
                 action: actionType
             }));
+        } else {
+            setUserAction({
+                user: null,
+                action: actionType
+            });
+        }
     }
 
     const closeHandler = () => {
