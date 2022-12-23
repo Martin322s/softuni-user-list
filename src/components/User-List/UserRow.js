@@ -1,4 +1,4 @@
-const UserRow = ({ user, detailsHandler }) => {
+const UserRow = ({ user, detailsHandler, editHandler }) => {
     return (
         <>
             <td>
@@ -14,7 +14,11 @@ const UserRow = ({ user, detailsHandler }) => {
             <td>{user.phoneNumber}</td>
             <td>{user.createdAt.substring(0, 10)}</td>
             <td className="actions">
-                <button className="btn edit-btn" title="Edit">
+                <button 
+                    className="btn edit-btn" 
+                    title="Edit" 
+                    onClick={() => editHandler(user._id)}
+                >
                     <svg
                         aria-hidden="true"
                         focusable="false"

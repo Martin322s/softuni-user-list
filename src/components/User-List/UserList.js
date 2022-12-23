@@ -4,6 +4,7 @@ import { UserContext } from "../../contexts/UserContext";
 import UserRow from "./UserRow";
 import Details from "../Details/Details";
 import action from "../../constants/constants";
+import Edit from "../Edit/Edit";
 
 const UserList = () => {
     const { users } = useContext(UserContext);
@@ -17,6 +18,14 @@ const UserList = () => {
             .then(result => setUserAction({
                 user: result.user,
                 action: action.Details
+            }));
+    }
+
+    const editHandler = (userId) => {
+        service.getOne(userId)
+            .then(result => setUserAction({
+                user: result.user,
+                action: action.Edit
             }));
     }
 
@@ -34,6 +43,12 @@ const UserList = () => {
                 {userAction.action === action.Details &&
                     <Details
                         user={userAction.user}
+                        closeHandler={closeHandler}
+                    />
+                }
+
+                {userAction.action === action.Edit &&
+                    <Edit
                         closeHandler={closeHandler}
                     />
                 }
@@ -141,6 +156,7 @@ const UserList = () => {
                                 <UserRow
                                     user={user}
                                     detailsHandler={detailsHandler}
+                                    editHandler={editHandler}
                                 />
                             </tr>
                         )}
