@@ -46,7 +46,7 @@ const Create = ({ closeHandler }) => {
         }
 
         service.create(userData)
-            .then((user) => console.log(user));
+            .then(() => closeHandler());
     }
 
     const changeHandler = (ev) => {
