@@ -1,4 +1,5 @@
 import { useState } from "react";
+import * as service from "../../services/ContextService";
 
 const Create = ({ closeHandler }) => {
     const [data, setData] = useState({
@@ -25,7 +26,28 @@ const Create = ({ closeHandler }) => {
         streetNumber: false
     });
 
-    const isFormValid = Object.values(error).some(x => true);
+    const isFormValid = Object.values(error).includes(true);
+
+    const createUser = (ev) => {
+        ev.preventDefault();
+
+        const userData = {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            imageUrl: data.imageUrl,
+            phoneNumber: data.phoneNumber,
+            address: {
+                country: data.country,
+                city: data.city,
+                street: data.street,
+                streetNumber: data.streetNumber
+            }
+        }
+
+        service.create(userData)
+            .then((user) => console.log(user));
+    }
 
     const changeHandler = (ev) => {
         setData(state => ({
@@ -34,45 +56,45 @@ const Create = ({ closeHandler }) => {
         }));
     }
 
-    const firstNameMinLength = (length) => {
-        if (data.firstName.length < length) {
+    const minLength = (length, text, type) => {
+        if (text.length < length) {
             setError(state => ({
                 ...state,
-                firstName: true
+                [type]: true
             }));
         } else {
             setError(state => ({
                 ...state,
-                firstName: false
+                [type]: false
             }));
         }
     }
 
-    const lastNameMinLength = (length) => {
-        if (data.lastName.length < length) {
-            setError(state => ({
-                ...state,
-                lastName: true
-            }));
-        } else {
-            setError(state => ({
-                ...state,
-                lastName: false
-            }));
-        }
-    }
-
-    const emailValidation = (regex) => {
+    const validator = (regex, text, type) => {
         const regexStr = new RegExp(regex, 'g');
-        if (!regexStr.test(data.email)) {
+        if (!regexStr.test(text)) {
             setError(state => ({
                 ...state,
-                email: true
+                [type]: true
             }));
         } else {
             setError(state => ({
                 ...state,
-                email: false
+                [type]: false
+            }));
+        }
+    }
+
+    const positiveValidation = (number, type) => {
+        if (number < 0) {
+            setError(state => ({
+                ...state,
+                [type]: true
+            }));
+        } else {
+            setError(state => ({
+                ...state,
+                [type]: false
             }));
         }
     }
@@ -102,7 +124,7 @@ const Create = ({ closeHandler }) => {
                             </svg>
                         </button>
                     </header>
-                    <form>
+                    <form onSubmit={(ev) => createUser(ev)}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
@@ -115,7 +137,7 @@ const Create = ({ closeHandler }) => {
                                         name="firstName"
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
-                                        onBlur={() => firstNameMinLength(3)}
+                                        onBlur={() => minLength(3, data.firstName, "firstName")}
                                     />
                                 </div>
                                 {error.firstName &&
@@ -134,7 +156,7 @@ const Create = ({ closeHandler }) => {
                                         name="lastName"
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
-                                        onBlur={() => lastNameMinLength(3)}
+                                        onBlur={() => minLength(3, data.lastName, "lastName")}
                                     />
                                 </div>
                                 {error.lastName &&
@@ -157,7 +179,7 @@ const Create = ({ closeHandler }) => {
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
                                         onBlur={() =>
-                                            emailValidation("^[A-Za-z0-9_\.]+@[A-Za-z]+\.[A-Za-z]{2,3}$")}
+                                            validator("^[A-Za-z0-9_\.]+@[A-Za-z]+\.[A-Za-z]{2,3}$", data.email, "email")}
                                     />
                                 </div>
                                 {error.email &&
@@ -175,9 +197,12 @@ const Create = ({ closeHandler }) => {
                                         name="phoneNumber"
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => validator('^0[1-9]{1}[0-9]{8}$', data.phoneNumber, "phoneNumber")}
                                     />
                                 </div>
-                                <p className="form-error">Phone number is not valid!</p>
+                                {error.phoneNumber &&
+                                    <p className="form-error">Phone number is not valid!</p>
+                                }
                             </div>
                         </div>
                         <div className="form-group long-line">
@@ -191,9 +216,10 @@ const Create = ({ closeHandler }) => {
                                     name="imageUrl"
                                     type="text"
                                     onChange={(ev) => changeHandler(ev)}
+                                    onBlur={() => validator("^https?:\/\/.+", data.imageUrl, "imageUrl")}
                                 />
                             </div>
-                            <p className="form-error">ImageUrl is not valid!</p>
+                            {error.imageUrl && <p className="form-error">ImageUrl is not valid!</p>}
                         </div>
                         <div className="form-row">
                             <div className="form-group">
@@ -207,11 +233,14 @@ const Create = ({ closeHandler }) => {
                                         name="country"
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(2, data.country, "country")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Country should be at least 2 characters long!
-                                </p>
+                                {error.country &&
+                                    <p className="form-error">
+                                        Country should be at least 2 characters long!
+                                    </p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="city">City</label>
@@ -224,11 +253,14 @@ const Create = ({ closeHandler }) => {
                                         name="city"
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(3, data.city, "city")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    City should be at least 3 characters long!
-                                </p>
+                                {error.city &&
+                                    <p className="form-error">
+                                        City should be at least 3 characters long!
+                                    </p>
+                                }
                             </div>
                         </div>
                         <div className="form-row">
@@ -243,11 +275,14 @@ const Create = ({ closeHandler }) => {
                                         name="street"
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(3, data.street, "street")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Street should be at least 3 characters long!
-                                </p>
+                                {error.street &&
+                                    <p className="form-error">
+                                        Street should be at least 3 characters long!
+                                    </p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="streetNumber">Street number</label>
@@ -260,17 +295,20 @@ const Create = ({ closeHandler }) => {
                                         name="streetNumber"
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => positiveValidation(Number(data.streetNumber), "streetNumber")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Street number should be a positive number!
-                                </p>
+                                {error.streetNumber &&
+                                    <p className="form-error">
+                                        Street number should be a positive number!
+                                    </p>
+                                }
                             </div>
                         </div>
                         <div id="form-actions">
-                            <button 
-                                id="action-save" 
-                                className="btn" 
+                            <button
+                                id="action-save"
+                                className="btn"
                                 type="submit"
                                 disabled={isFormValid}
                             >

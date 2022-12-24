@@ -9,7 +9,7 @@ import Delete from "../Delete/Delete";
 import Create from "../Create/Create";
 
 const UserList = () => {
-    const { users } = useContext(UserContext);
+    const { users, createUser } = useContext(UserContext);
     const [userAction, setUserAction] = useState({
         user: null,
         action: null
@@ -64,6 +64,7 @@ const UserList = () => {
                 {userAction.action === action.Add &&
                     <Create
                         closeHandler={closeHandler}
+                        createUser={createUser}
                     />
                 }
 
