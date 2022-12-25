@@ -21,13 +21,25 @@ export const UserContextProvider = ({ children }) => {
 
         service.create(userData)
             .then(() => {
-                setNewUser(true);
+                setNewUser(!newUser);
                 closeHandler();
             });
     }
 
+    const deleteUser = (ev, userId, closeHandler) => {
+        ev.preventDefault();
+
+        service.deleteUser(userId)
+            .then(() => {
+                setNewUser(!newUser);
+                closeHandler();
+            })
+    } 
+
     return (
-        <UserContext.Provider value={{ users: data.users, createUser }}>
+        <UserContext.Provider 
+            value={{ users: data.users, createUser, deleteUser }}
+        >
             {children}
         </UserContext.Provider>
     );

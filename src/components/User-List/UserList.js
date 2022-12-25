@@ -57,6 +57,7 @@ const UserList = () => {
 
                 {userAction.action === action.Delete &&
                     <Delete
+                    user={userAction.user}
                         closeHandler={closeHandler}
                     />
                 }

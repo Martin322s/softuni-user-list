@@ -1,4 +1,9 @@
-const Delete = ({ closeHandler }) => {
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+
+const Delete = ({ user, closeHandler }) => {
+    const { deleteUser } = useContext(UserContext);
+
     return (
         <div className="overlay">
             <div className="backdrop" onClick={() => closeHandler()} />
@@ -26,7 +31,12 @@ const Delete = ({ closeHandler }) => {
                     </header>
                     <div className="actions">
                         <div id="form-actions">
-                            <button id="action-save" className="btn" type="submit">
+                            <button 
+                                id="action-save" 
+                                className="btn" 
+                                type="submit"
+                                onClick={(ev) => deleteUser(ev, user._id, closeHandler)}
+                            >
                                 Delete
                             </button>
                             <button
