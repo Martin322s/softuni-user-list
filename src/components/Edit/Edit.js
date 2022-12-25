@@ -1,4 +1,15 @@
+import { useState } from "react";
+
 const Edit = ({ closeHandler, user }) => {
+    const [data, setData] = useState({ ...user });
+
+    const changeHandler = (ev) => {
+        setData(state => ({
+            ...state,
+            [ev.target.name]: ev.target.value
+        }));
+    }
+
     return (
         <div className="overlay">
             <div className="backdrop" onClick={() => closeHandler()} />
@@ -36,6 +47,8 @@ const Edit = ({ closeHandler, user }) => {
                                         id="firstName"
                                         name="firstName"
                                         type="text"
+                                        value={data.firstName}
+                                        onChange={(ev) => changeHandler(ev)}
                                     />
                                 </div>
                                 <p className="form-error">
@@ -48,7 +61,13 @@ const Edit = ({ closeHandler, user }) => {
                                     <span>
                                         <i className="fa-solid fa-user" />
                                     </span>
-                                    <input id="lastName" name="lastName" type="text" />
+                                    <input
+                                        id="lastName"
+                                        name="lastName"
+                                        type="text"
+                                        value={data.lastName}
+                                        onChange={(ev) => changeHandler(ev)}
+                                    />
                                 </div>
                                 <p className="form-error">
                                     Last name should be at least 3 characters long!
@@ -62,7 +81,13 @@ const Edit = ({ closeHandler, user }) => {
                                     <span>
                                         <i className="fa-solid fa-envelope" />
                                     </span>
-                                    <input id="email" name="email" type="text" />
+                                    <input
+                                        id="email"
+                                        name="email"
+                                        type="text"
+                                        value={data.email}
+                                        onChange={(ev) => changeHandler(ev)}
+                                    />
                                 </div>
                                 <p className="form-error">Email is not valid!</p>
                             </div>
@@ -72,7 +97,13 @@ const Edit = ({ closeHandler, user }) => {
                                     <span>
                                         <i className="fa-solid fa-phone" />
                                     </span>
-                                    <input id="phoneNumber" name="phoneNumber" type="text" />
+                                    <input
+                                        id="phoneNumber"
+                                        name="phoneNumber"
+                                        type="text"
+                                        value={data.phoneNumber}
+                                        onChange={(ev) => changeHandler(ev)}
+                                    />
                                 </div>
                                 <p className="form-error">Phone number is not valid!</p>
                             </div>
@@ -83,7 +114,13 @@ const Edit = ({ closeHandler, user }) => {
                                 <span>
                                     <i className="fa-solid fa-image" />
                                 </span>
-                                <input id="imageUrl" name="imageUrl" type="text" />
+                                <input
+                                    id="imageUrl"
+                                    name="imageUrl"
+                                    type="text"
+                                    value={data.imageUrl}
+                                    onChange={(ev) => changeHandler(ev)}
+                                />
                             </div>
                             <p className="form-error">ImageUrl is not valid!</p>
                         </div>
@@ -94,7 +131,13 @@ const Edit = ({ closeHandler, user }) => {
                                     <span>
                                         <i className="fa-solid fa-map" />
                                     </span>
-                                    <input id="country" name="country" type="text" />
+                                    <input
+                                        id="country"
+                                        name="country"
+                                        type="text"
+                                        value={data.address.country}
+                                        onChange={(ev) => changeHandler(ev)}
+                                    />
                                 </div>
                                 <p className="form-error">
                                     Country should be at least 2 characters long!
@@ -106,7 +149,13 @@ const Edit = ({ closeHandler, user }) => {
                                     <span>
                                         <i className="fa-solid fa-city" />
                                     </span>
-                                    <input id="city" name="city" type="text" />
+                                    <input
+                                        id="city"
+                                        name="city"
+                                        type="text"
+                                        value={data.address.city}
+                                        onChange={(ev) => changeHandler(ev)}
+                                    />
                                 </div>
                                 <p className="form-error">
                                     City should be at least 3 characters long!
@@ -120,7 +169,13 @@ const Edit = ({ closeHandler, user }) => {
                                     <span>
                                         <i className="fa-solid fa-map" />
                                     </span>
-                                    <input id="street" name="street" type="text" />
+                                    <input
+                                        id="street"
+                                        name="street"
+                                        type="text"
+                                        value={data.address.street}
+                                        onChange={(ev) => changeHandler(ev)}
+                                    />
                                 </div>
                                 <p className="form-error">
                                     Street should be at least 3 characters long!
@@ -132,7 +187,13 @@ const Edit = ({ closeHandler, user }) => {
                                     <span>
                                         <i className="fa-solid fa-house-chimney" />
                                     </span>
-                                    <input id="streetNumber" name="streetNumber" type="text" />
+                                    <input
+                                        id="streetNumber"
+                                        name="streetNumber"
+                                        type="text"
+                                        value={data.address.streetNumber}
+                                        onChange={(ev) => changeHandler(ev)}
+                                    />
                                 </div>
                                 <p className="form-error">
                                     Street number should be a positive number!
