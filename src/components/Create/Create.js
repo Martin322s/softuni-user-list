@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import * as service from "../../services/ContextService";
 
 const Create = ({ closeHandler }) => {
     const { createUser } = useContext(UserContext);
@@ -174,6 +173,7 @@ const Create = ({ closeHandler }) => {
                                         type="text"
                                         onChange={(ev) => changeHandler(ev)}
                                         onBlur={() =>
+                                            /* eslint-disable */
                                             validator("^[A-Za-z0-9_\.]+@[A-Za-z]+\.[A-Za-z]{2,3}$", data.email, "email")}
                                     />
                                 </div>
