@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/UserContext";
 import * as service from "../../services/ContextService";
 
 const Create = ({ closeHandler }) => {
+    const { createUser } = useContext(UserContext);
     const [data, setData] = useState({
         firstName: "",
         lastName: "",
@@ -28,25 +30,18 @@ const Create = ({ closeHandler }) => {
 
     const isFormValid = Object.values(error).includes(true);
 
-    const createUser = (ev) => {
-        ev.preventDefault();
-
-        const userData = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            imageUrl: data.imageUrl,
-            phoneNumber: data.phoneNumber,
-            address: {
-                country: data.country,
-                city: data.city,
-                street: data.street,
-                streetNumber: data.streetNumber
-            }
+    const userData = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        imageUrl: data.imageUrl,
+        phoneNumber: data.phoneNumber,
+        address: {
+            country: data.country,
+            city: data.city,
+            street: data.street,
+            streetNumber: data.streetNumber
         }
-
-        service.create(userData)
-            .then(() => closeHandler());
     }
 
     const changeHandler = (ev) => {
@@ -124,7 +119,7 @@ const Create = ({ closeHandler }) => {
                             </svg>
                         </button>
                     </header>
-                    <form onSubmit={(ev) => createUser(ev)}>
+                    <form onSubmit={(ev) => createUser(ev, userData, closeHandler)}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>

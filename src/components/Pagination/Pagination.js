@@ -4,7 +4,7 @@ const Pagination = () => {
             <div className="limits">
                 <span>Items per page:</span>
                 <select name="limit" className="limit">
-                    <option>5</option>
+                    <option>100</option>
                     <option>10</option>
                     <option>15</option>
                     <option>20</option>

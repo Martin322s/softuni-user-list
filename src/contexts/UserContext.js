@@ -9,13 +9,25 @@ export const UserContextProvider = ({ children }) => {
         count: 0
     });
 
+    const [newUser, setNewUser] = useState(false);
+
     useEffect(() => {
         service.getAll()
             .then(result => setData(result));
-    }, [data.count]);
+    }, [newUser]);
+
+    const createUser = (ev, userData, closeHandler) => {
+        ev.preventDefault();
+
+        service.create(userData)
+            .then(() => {
+                setNewUser(true);
+                closeHandler();
+            });
+    }
 
     return (
-        <UserContext.Provider value={{ users: data.users }}>
+        <UserContext.Provider value={{ users: data.users, createUser }}>
             {children}
         </UserContext.Provider>
     );
