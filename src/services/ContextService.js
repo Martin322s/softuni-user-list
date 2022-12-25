@@ -20,3 +20,14 @@ export const deleteUser = (userId) => {
     })
         .then(res => res.json());
 }
+
+export const updateUser = (userId, userData) => {
+    return fetch(`${baseUrl}/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+        .then(res => res.json());
+}

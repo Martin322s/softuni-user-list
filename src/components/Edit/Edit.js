@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 const Edit = ({ closeHandler, user }) => {
+    const { updateUser } = useContext(UserContext);
     const [data, setData] = useState({
         firstName: user.firstName,
         lastName: user.lastName,
@@ -116,7 +118,7 @@ const Edit = ({ closeHandler, user }) => {
                             </svg>
                         </button>
                     </header>
-                    <form>
+                    <form onSubmit={(ev) => updateUser(ev, user._id, userData, closeHandler)}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
@@ -307,7 +309,12 @@ const Edit = ({ closeHandler, user }) => {
                             </div>
                         </div>
                         <div id="form-actions">
-                            <button id="action-save" className="btn" type="submit">
+                            <button 
+                                id="action-save" 
+                                className="btn" 
+                                type="submit"
+                                disabled={isFormValid}
+                            >
                                 Save
                             </button>
                             <button
