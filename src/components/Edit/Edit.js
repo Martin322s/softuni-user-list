@@ -1,13 +1,94 @@
 import { useState } from "react";
 
 const Edit = ({ closeHandler, user }) => {
-    const [data, setData] = useState({ ...user });
+    const [data, setData] = useState({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        imageUrl: user.imageUrl,
+        country: user.address.country,
+        city: user.address.city,
+        street: user.address.street,
+        streetNumber: user.address.streetNumber
+    });
 
     const changeHandler = (ev) => {
         setData(state => ({
             ...state,
             [ev.target.name]: ev.target.value
         }));
+    }
+
+    const [error, setError] = useState({
+        firstName: false,
+        lastName: false,
+        email: false,
+        phoneNumber: false,
+        imageUrl: false,
+        country: false,
+        city: false,
+        street: false,
+        streetNumber: false
+    });
+
+    const isFormValid = Object.values(error).includes(true);
+
+    const minLength = (length, text, type) => {
+        if (text.length < length) {
+            setError(state => ({
+                ...state,
+                [type]: true
+            }));
+        } else {
+            setError(state => ({
+                ...state,
+                [type]: false
+            }));
+        }
+    }
+
+    const validator = (regex, text, type) => {
+        const regexStr = new RegExp(regex, 'g');
+        if (!regexStr.test(text)) {
+            setError(state => ({
+                ...state,
+                [type]: true
+            }));
+        } else {
+            setError(state => ({
+                ...state,
+                [type]: false
+            }));
+        }
+    }
+
+    const positiveValidation = (number, type) => {
+        if (number < 0) {
+            setError(state => ({
+                ...state,
+                [type]: true
+            }));
+        } else {
+            setError(state => ({
+                ...state,
+                [type]: false
+            }));
+        }
+    }
+
+    const userData = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        imageUrl: data.imageUrl,
+        phoneNumber: data.phoneNumber,
+        address: {
+            country: data.country,
+            city: data.city,
+            street: data.street,
+            streetNumber: data.streetNumber
+        }
     }
 
     return (
@@ -49,11 +130,14 @@ const Edit = ({ closeHandler, user }) => {
                                         type="text"
                                         value={data.firstName}
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(3, data.firstName, "firstName")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    First name should be at least 3 characters long!
-                                </p>
+                                {error.firstName &&
+                                    <p className="form-error">
+                                        First name should be at least 3 characters long!
+                                    </p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="lastName">Last name</label>
@@ -67,11 +151,14 @@ const Edit = ({ closeHandler, user }) => {
                                         type="text"
                                         value={data.lastName}
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(3, data.lastName, "lastName")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Last name should be at least 3 characters long!
-                                </p>
+                                {error.lastName &&
+                                    <p className="form-error">
+                                        Last name should be at least 3 characters long!
+                                    </p>
+                                }
                             </div>
                         </div>
                         <div className="form-row">
@@ -87,9 +174,12 @@ const Edit = ({ closeHandler, user }) => {
                                         type="text"
                                         value={data.email}
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() =>
+                                            /* eslint-disable */
+                                            validator("^[A-Za-z0-9_\.]+@[A-Za-z]+\.[A-Za-z]{2,3}$", data.email, "email")}
                                     />
                                 </div>
-                                <p className="form-error">Email is not valid!</p>
+                                {error.email && <p className="form-error">Email is not valid!</p>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="phoneNumber">Phone number</label>
@@ -103,9 +193,11 @@ const Edit = ({ closeHandler, user }) => {
                                         type="text"
                                         value={data.phoneNumber}
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() =>
+                                            validator('^0[1-9]{1}[0-9]{8}$', data.phoneNumber, "phoneNumber")}
                                     />
                                 </div>
-                                <p className="form-error">Phone number is not valid!</p>
+                                {error.phoneNumber && <p className="form-error">Phone number is not valid!</p>}
                             </div>
                         </div>
                         <div className="form-group long-line">
@@ -120,9 +212,10 @@ const Edit = ({ closeHandler, user }) => {
                                     type="text"
                                     value={data.imageUrl}
                                     onChange={(ev) => changeHandler(ev)}
+                                    onBlur={() => validator("^https?:\/\/.+", data.imageUrl, "imageUrl")}
                                 />
                             </div>
-                            <p className="form-error">ImageUrl is not valid!</p>
+                            {error.imageUrl && <p className="form-error">ImageUrl is not valid!</p>}
                         </div>
                         <div className="form-row">
                             <div className="form-group">
@@ -135,13 +228,17 @@ const Edit = ({ closeHandler, user }) => {
                                         id="country"
                                         name="country"
                                         type="text"
-                                        value={data.address.country}
+                                        value={data.country}
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(2, data.country, "country")}
+
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Country should be at least 2 characters long!
-                                </p>
+                                {error.country &&
+                                    <p className="form-error">
+                                        Country should be at least 2 characters long!
+                                    </p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="city">City</label>
@@ -153,13 +250,16 @@ const Edit = ({ closeHandler, user }) => {
                                         id="city"
                                         name="city"
                                         type="text"
-                                        value={data.address.city}
+                                        value={data.city}
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(3, data.city, "city")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    City should be at least 3 characters long!
-                                </p>
+                                {error.city &&
+                                    <p className="form-error">
+                                        City should be at least 3 characters long!
+                                    </p>
+                                }
                             </div>
                         </div>
                         <div className="form-row">
@@ -173,13 +273,16 @@ const Edit = ({ closeHandler, user }) => {
                                         id="street"
                                         name="street"
                                         type="text"
-                                        value={data.address.street}
+                                        value={data.street}
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => minLength(3, data.street, "street")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Street should be at least 3 characters long!
-                                </p>
+                                {error.street &&
+                                    <p className="form-error">
+                                        Street should be at least 3 characters long!
+                                    </p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="streetNumber">Street number</label>
@@ -191,13 +294,16 @@ const Edit = ({ closeHandler, user }) => {
                                         id="streetNumber"
                                         name="streetNumber"
                                         type="text"
-                                        value={data.address.streetNumber}
+                                        value={data.streetNumber}
                                         onChange={(ev) => changeHandler(ev)}
+                                        onBlur={() => positiveValidation(data.streetNumber, "streetNumber")}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Street number should be a positive number!
-                                </p>
+                                {error.streetNumber &&
+                                    <p className="form-error">
+                                        Street number should be a positive number!
+                                    </p>
+                                }
                             </div>
                         </div>
                         <div id="form-actions">
