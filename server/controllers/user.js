@@ -85,7 +85,6 @@ const getUsers = async (req, res) => {
     let users = await userModel
       .find(query)
       .select('firstName lastName email imageUrl phoneNumber createdAt updatedAt')
-      .limit(limit)
       .skip(skipIndex)
       .sort(sortCriteria)
       .lean();

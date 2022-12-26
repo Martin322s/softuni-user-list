@@ -1,4 +1,22 @@
+import { useState } from "react";
+
 const Search = () => {
+    const [data, setData] = useState({
+        search: "",
+        criteria: ""
+    });
+
+    const changeHandler = (ev) => {
+        ev.preventDefault();
+
+        setData(state => ({
+            ...state,
+            [ev.target.name]: ev.target.value
+        }));
+    }
+
+    console.log(data);
+
     return (
         <form className="search-form">
             <h2>
@@ -24,6 +42,8 @@ const Search = () => {
                     type="text"
                     placeholder="Please, select the search criteria"
                     name="search"
+                    value={data.search}
+                    onChange={(ev) => changeHandler(ev)}
                 />
                 {/* Show the clear button only if input field length !== 0 */}
                 <button className="btn close-btn">
@@ -35,7 +55,7 @@ const Search = () => {
             </div>
             <div className="filter">
                 <span>Search Criteria:</span>
-                <select name="criteria" className="criteria">
+                <select name="criteria" className="criteria" onChange={(ev) => changeHandler(ev)}>
                     <option value="">Not selected</option>
                     <option value="">First Name</option>
                     <option value="">Last Name</option>
