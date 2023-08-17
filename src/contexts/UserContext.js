@@ -12,9 +12,12 @@ export const UserContextProvider = ({ children }) => {
     const [newUser, setNewUser] = useState(false);
 
     useEffect(() => {
-        service.getAll()
-            .then(result => setData(result));
+        service.getAll().then(result => setData(result));
     }, [newUser]);
+
+    const searchUsers = (ev) => {
+        ev.preventDefault();
+    }
 
     const createUser = (ev, userData, closeHandler) => {
         ev.preventDefault();
@@ -48,7 +51,7 @@ export const UserContextProvider = ({ children }) => {
 
     return (
         <UserContext.Provider 
-            value={{ users: data.users, createUser, deleteUser, updateUser }}
+            value={{ users: data.users, createUser, deleteUser, updateUser, searchUsers }}
         >
             {children}
         </UserContext.Provider>

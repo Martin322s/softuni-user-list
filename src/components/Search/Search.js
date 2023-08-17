@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 const Search = () => {
+    const { searchUsers } = useContext(UserContext);
+
     const [data, setData] = useState({
         search: "",
         criteria: ""
@@ -15,10 +18,17 @@ const Search = () => {
         }));
     }
 
-    console.log(data);
+    const clearSearchHandler = (ev) => {
+        ev.preventDefault();
+
+        setData(state => ({
+            ...state,
+            search: ''
+        }));
+    }
 
     return (
-        <form className="search-form">
+        <form className="search-form" onSubmit={(ev) => searchUsers(ev)}>
             <h2>
                 <svg
                     aria-hidden="true"
@@ -45,12 +55,14 @@ const Search = () => {
                     value={data.search}
                     onChange={(ev) => changeHandler(ev)}
                 />
-                {/* Show the clear button only if input field length !== 0 */}
-                <button className="btn close-btn">
-                    <i className="fa-solid fa-xmark" />
-                </button>
+
+                {data.search !== '' &&
+                    <button className="btn close-btn" onClick={(ev) => clearSearchHandler(ev)}>
+                        <i className="fas fa-times"></i>
+                    </button>
+                }
                 <button className="btn" title="Please, select the search criteria">
-                    <i className="fa-solid fa-magnifying-glass" />
+                    <i className="fas fa-search"></i>
                 </button>
             </div>
             <div className="filter">
