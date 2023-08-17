@@ -9,7 +9,7 @@ import Delete from "../Delete/Delete";
 import Create from "../Create/Create";
 
 const UserList = () => {
-    const { users, createUser } = useContext(UserContext);
+    const { users, createUser, searchedUsers } = useContext(UserContext);
     const [userAction, setUserAction] = useState({
         user: null,
         action: null
@@ -18,10 +18,10 @@ const UserList = () => {
     const clickHandler = (userId, actionType) => {
         if (userId !== null) {
             service.getOne(userId)
-            .then(result => setUserAction({
-                user: result.user,
-                action: actionType
-            }));
+                .then(result => setUserAction({
+                    user: result.user,
+                    action: actionType
+                }));
         } else {
             setUserAction({
                 user: null,
@@ -37,6 +37,7 @@ const UserList = () => {
         });
     };
 
+    console.log(searchedUsers.length <= 0);
     return (
         <section className="card users-container">
             <div className="table-wrapper">
@@ -57,7 +58,7 @@ const UserList = () => {
 
                 {userAction.action === action.Delete &&
                     <Delete
-                    user={userAction.user}
+                        user={userAction.user}
                         closeHandler={closeHandler}
                     />
                 }
@@ -167,14 +168,24 @@ const UserList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(user =>
-                            <tr key={user._id}>
-                                <UserRow
-                                    user={user}
-                                    onActionClick={clickHandler}
-                                />
-                            </tr>
-                        )}
+                        {searchedUsers.length <= 0
+                            ?
+                            users.map(user =>
+                                <tr key={user._id}>
+                                    <UserRow
+                                        user={user}
+                                        onActionClick={clickHandler}
+                                    />
+                                </tr>)
+                            :
+                            searchedUsers.map(user =>
+                                <tr key={user._id}>
+                                    <UserRow
+                                        user={user}
+                                        onActionClick={clickHandler}
+                                    />
+                                </tr>)
+                        }
                     </tbody>
                 </table>
             </div>

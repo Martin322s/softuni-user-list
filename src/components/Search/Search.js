@@ -28,7 +28,7 @@ const Search = () => {
     }
 
     return (
-        <form className="search-form" onSubmit={(ev) => searchUsers(ev)}>
+        <form className="search-form" onSubmit={(ev) => searchUsers(ev, data)}>
             <h2>
                 <svg
                     aria-hidden="true"

@@ -9,14 +9,40 @@ export const UserContextProvider = ({ children }) => {
         count: 0
     });
 
+    const [searchedUsers, setSearchedUsers] = useState([]);
+
     const [newUser, setNewUser] = useState(false);
 
     useEffect(() => {
         service.getAll().then(result => setData(result));
-    }, [newUser]);
+    }, []);
 
-    const searchUsers = (ev) => {
+    const searchUsers = (ev, searchData) => {
         ev.preventDefault();
+
+        switch(data.criteria) {
+            case 'firstName': setSearchedUsers(() => 
+                data.users
+                    .filter(x => x.firstName.toLowerCase().includes(searchData.search.toLowerCase()))
+            );
+                break;
+            case 'lastName': setData(state => ({
+                ...state,
+                
+            }));
+                break;
+            case 'email': setData(state => ({
+                ...state,
+                
+            }));
+                break;
+            case 'phone': setData(state => ({
+                ...state,
+                
+            }));
+                break;
+            default: 
+        }
     }
 
     const createUser = (ev, userData, closeHandler) => {
@@ -51,7 +77,7 @@ export const UserContextProvider = ({ children }) => {
 
     return (
         <UserContext.Provider 
-            value={{ users: data.users, createUser, deleteUser, updateUser, searchUsers }}
+            value={{ users: data.users, createUser, deleteUser, updateUser, searchUsers, searchedUsers }}
         >
             {children}
         </UserContext.Provider>
