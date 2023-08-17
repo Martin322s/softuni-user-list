@@ -27,6 +27,8 @@ const Search = () => {
         }));
     }
 
+    console.log(data);
+
     return (
         <form className="search-form" onSubmit={(ev) => searchUsers(ev, data)}>
             <h2>
@@ -69,10 +71,10 @@ const Search = () => {
                 <span>Search Criteria:</span>
                 <select name="criteria" className="criteria" onChange={(ev) => changeHandler(ev)}>
                     <option value="">Not selected</option>
-                    <option value="">First Name</option>
-                    <option value="">Last Name</option>
-                    <option value="">Email</option>
-                    <option value="">Phone</option>
+                    <option value="firstName">First Name</option>
+                    <option value="lastName">Last Name</option>
+                    <option value="email">Email</option>
+                    <option value="phone">Phone</option>
                 </select>
             </div>
         </form>
